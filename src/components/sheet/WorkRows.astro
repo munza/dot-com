@@ -1,0 +1,38 @@
+---
+import type { Role } from "@/consts";
+
+interface Props {
+	roles: Role[];
+}
+
+const { roles } = Astro.props;
+---
+
+<div class="rows" style="--cols: 104px minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr) 112px">
+	<div class="rows-head" aria-hidden="true"><span>Years</span><span>Company</span><span>Role</span><span>Domain</span><span>Setup</span></div>
+	{
+		roles.map((role, i) => (
+			<div class="row">
+				<span class:list={["meta", { current: i === 0 && role.years.endsWith("now") }]}>{role.years}</span>
+				<span class="company">{role.url ? <a href={role.url}>{role.company}</a> : role.company}</span>
+				<span>{role.role}</span>
+				<span class="dim">{role.domain}</span>
+				<span class="meta hide-sm">{role.setup}</span>
+			</div>
+		))
+	}
+</div>
+
+<style>
+	.company {
+		font-weight: 500;
+	}
+
+	.company a {
+		text-decoration: none;
+	}
+
+	.current {
+		color: var(--theme-accent);
+	}
+</style>

@@ -1,12 +1,15 @@
 ---
 import "@/styles/global.css";
 
+import Footer from "@/components/layout/Footer.astro";
 import Head from "@/components/layout/Head.astro";
+import Header from "@/components/layout/Header.astro";
 import ScrollToTop from "@/components/layout/ScrollToTop.astro";
 import SkipLink from "@/components/layout/SkipLink.astro";
-import { siteConfig } from "@/consts";
+import { authorInfo } from "@/consts";
 
 interface Props {
+	/** The full <title>, e.g. "Writing · Tawsif Aqib". */
 	title: string;
 	description?: string;
 	image?: string;
@@ -14,22 +17,49 @@ interface Props {
 }
 
 const { title, description, image, type } = Astro.props;
-const pageTitle = `${siteConfig.title} – ${title}`;
 ---
 
 <html lang="en">
 	<head>
-		<Head title={pageTitle} description={description} image={image} type={type}>
+		<Head title={title} description={description} image={image} type={type}>
 			<slot name="head" />
 		</Head>
 	</head>
 	<body>
 		<SkipLink />
-		<slot name="header" />
-		<main id="main-content">
-			<slot />
-		</main>
-		<slot name="footer" />
+		<div class="sheet">
+			<Header />
+			<main id="main-content">
+				<slot />
+			</main>
+			<Footer />
+		</div>
+		<p class="colophon">
+			<span>&copy; {new Date().getFullYear()} {authorInfo.name} · {authorInfo.location}</span>
+			<span>Specifications subject to change without notice.</span>
+		</p>
 		<ScrollToTop />
 	</body>
 </html>
+
+<style>
+	.sheet {
+		max-width: 1240px;
+		margin: 0 auto;
+		background: var(--theme-sheet);
+		border: 1px solid var(--theme-rule);
+	}
+
+	.colophon {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		justify-content: space-between;
+		max-width: 1240px;
+		padding: 16px;
+		margin: 0 auto;
+		font-family: var(--theme-font-mono);
+		font-size: 11px;
+		color: var(--theme-muted);
+	}
+</style>

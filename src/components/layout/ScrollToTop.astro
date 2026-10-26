@@ -1,4 +1,44 @@
-<button id="scroll-to-top" type="button" class="fixed right-4 bottom-4" hidden>top ↑</button>
+---
+import Icon from "@/components/ui/Icon.astro";
+---
+
+<button id="scroll-to-top" type="button" aria-label="Scroll to top" hidden>
+	<Icon icon="arrow-up" aria-hidden="true" />
+</button>
+
+<style>
+	button {
+		position: fixed;
+		right: 16px;
+		bottom: 16px;
+		z-index: 40;
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		cursor: pointer;
+		color: var(--theme-foreground);
+		background: var(--theme-sheet);
+		border: 1px solid var(--theme-foreground);
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	button[hidden] {
+		display: none;
+	}
+
+	button:hover {
+		color: var(--theme-on-ink);
+		background: var(--theme-foreground);
+	}
+
+	button :global(svg) {
+		width: 18px;
+		height: 18px;
+	}
+</style>
 
 <script>
 	// Looked up on each call because ClientRouter replaces the button on navigation.

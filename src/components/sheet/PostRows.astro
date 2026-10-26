@@ -1,0 +1,64 @@
+---
+import { getPosts, postUrl, type Post } from "@/lib/posts";
+import { plannedPosts } from "@/consts";
+
+interface Props {
+	posts: Post[];
+	/** Also list the planned posts from consts.ts under "In preparation". */
+	planned?: boolean;
+}
+
+const { posts, planned = false } = Astro.props;
+// Numbers are fixed per post, counted from the oldest, so a post keeps its AN-number on every list.
+const published = await getPosts();
+const label = (n: number) => `AN-${String(n).padStart(2, "0")}`;
+const no = (post: Post) => label(published.length - published.findIndex((p) => p.id === post.id));
+---
+
+<div class="rows" style="--cols: 64px minmax(0, 1.3fr) minmax(0, 1.5fr) 110px 20px">
+	<div class="rows-head" aria-hidden="true"><span>No.</span><span>Title</span><span>Summary</span><span>Tag</span><span></span></div>
+	{
+		posts.map((post) => (
+			<a class="row" href={postUrl(post)}>
+				<span class="meta">{no(post)}</span>
+				<span class="title">{post.data.title}</span>
+				<span class="dim">{post.data.description}</span>
+				<span class="meta hide-sm">{post.data.tags[0]}</span>
+				<span class="go hide-sm" aria-hidden="true">{post.data.externalUrl ? "↗" : "→"}</span>
+			</a>
+		))
+	}
+</div>
+{
+	planned && plannedPosts.length > 0 && (
+		<>
+			<p class="caption prep">IN PREPARATION</p>
+			<div class="rows" style="--cols: 64px minmax(0, 1.3fr) minmax(0, 1.5fr) 110px 20px">
+				{plannedPosts.map((title, i) => (
+					<div class="row dim">
+						<span class="meta">{label(published.length + i + 1)}</span>
+						<span class="title planned">{title}</span>
+						<span class="hide-sm" />
+						<span class="meta hide-sm">Planned</span>
+						<span class="hide-sm" />
+					</div>
+				))}
+			</div>
+		</>
+	)
+}
+
+<style>
+	.title {
+		font-weight: 500;
+	}
+
+	.planned {
+		color: var(--theme-text);
+	}
+
+	.prep {
+		margin: 28px 0 8px;
+		font-size: 11px;
+	}
+</style>

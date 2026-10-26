@@ -1,0 +1,56 @@
+---
+import { maskParts } from "@/lib/mask";
+
+interface Props {
+	text: string;
+}
+
+const { text } = Astro.props;
+const parts = maskParts(text);
+const masked = parts.some((part) => part.hidden > 0);
+// Screen readers would read each "▮" aloud, so they get the visible letters only.
+const visible = parts.map((part) => part.text).join("");
+---
+
+{
+	masked ? (
+		<span class="masked">
+			<span class="sr-only">{visible}…, name partly hidden</span>
+			<span aria-hidden="true">
+				{parts.map((part) =>
+					part.hidden ? (
+						<span class="run">
+							{Array.from({ length: part.hidden }, () => (
+								<span class="box" />
+							))}
+						</span>
+					) : (
+						part.text
+					),
+				)}
+			</span>
+		</span>
+	) : (
+		text
+	)
+}
+
+<style>
+	.masked {
+		white-space: nowrap;
+	}
+
+	/* One strip per run of hidden letters: equal cap-height boxes on the baseline, hairline gaps,
+	   in the muted rule color so the visible letters stay the strongest part of the name. */
+	.run {
+		display: inline-flex;
+		gap: 0.06em;
+		margin-left: 0.05em;
+	}
+
+	.box {
+		width: 0.5em;
+		height: 0.7em;
+		background: var(--theme-dot);
+	}
+</style>

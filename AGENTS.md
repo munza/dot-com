@@ -34,15 +34,15 @@ npm run type-check
 
 ## Theming
 
-The theme is brutalist: Tailwind is loaded without its preflight reset, so browser defaults (heading sizes, list bullets, underlined links, native buttons) are the design. Write semantic HTML and avoid classes; use a utility class only when there is no element-level way to do it (e.g. `sr-only`, `fixed`). Site-wide element rules go in the `@layer base` block of `src/styles/global.css`.
+The design is a "datasheet" (see README). Colors are the `--theme-*` variables in the `:root` (light) and `:root.dark` (dark) blocks of `src/styles/global.css`; components must use them, never raw colors, so both themes keep working. Keep them as hex values because `src/lib/theme.ts` reads them for the OG images, manifest and `theme-color` tags.
 
-Colors are the `--theme-*` variables in the `:root` (light) and `:root.dark` (dark) blocks: page, foreground, link, visited, rule and surface. Page and foreground are also available as `bg-page` and `text-foreground`. Keep them as hex values because `src/lib/theme.ts` reads them for the OG images, manifest and `theme-color` tags.
+Reuse the shared classes in `global.css` (`.split`, `.display`, `.sec`, `.caption`, `.lede`, `.btn`, `.btn-solid`, `.link`, `.kv`, `.rows`/`.row`, `.chip`, `.led`) for patterns that appear on several pages. Put one-off styles in the component's scoped `<style>`, not in `global.css` and not as long utility-class lists.
 
-Site-wide text, navigation and social links live in `src/consts.ts`.
+Site content (identity, links, navigation, page titles, talks, work history, toolkit, Now and Uses) lives in `src/consts.ts`; posts and projects are content collections.
 
-## Blog
+## Writing
 
-Posts are Markdown files in `src/content/posts/`, validated by the schema in `src/content.config.ts`. Always load posts with `getPosts()` from `src/lib/posts.ts`, not `getCollection()`, so drafts stay out of production and the order is consistent.
+Posts are Markdown files in `src/content/posts/`, validated by the schema in `src/content.config.ts`. Always load posts with `getPosts()` from `src/lib/posts.ts`, not `getCollection()`, so drafts stay out of every listing and the order is consistent. Use `getLocalPosts()` for anything that needs a page on this site (posts with `externalUrl` only link out), and `postUrl()` for links.
 
 ## Page transitions
 

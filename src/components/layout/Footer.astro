@@ -1,13 +1,95 @@
 ---
-import Navigation from "@/components/layout/Navigation.astro";
+import Icon from "@/components/ui/Icon.astro";
 import { authorInfo, socialLinks } from "@/consts";
-
-const built = new Date().toLocaleDateString("en", { month: "short", year: "numeric" });
 ---
 
-<footer>
-	<hr />
-	<Navigation links={socialLinks} ariaLabel="Social links" label="Elsewhere" />
-	<p>Last built: {built}.</p>
-	<p>&copy; {new Date().getFullYear()} {authorInfo.name} · {authorInfo.location}</p>
+<footer id="contact" class="split">
+	<div class="ask">
+		<p class="sec">§ Interface</p>
+		<p class="line">Want to compare notes on backend architecture, Nix or Elixir?</p>
+	</div>
+	<div class="actions">
+		<a class="btn big" href={`mailto:${authorInfo.email}`}>
+			<span>{authorInfo.email}</span>
+			<Icon icon="arrow-up-right" aria-hidden="true" />
+		</a>
+		<nav aria-label="Profiles">
+			{
+				socialLinks.map((link) => (
+					<a class="btn" href={link.href}>
+						{link.icon && <Icon icon={link.icon} aria-hidden="true" />}
+						{link.label}
+					</a>
+				))
+			}
+		</nav>
+	</div>
 </footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--theme-rule);
+	}
+
+	.ask,
+	.actions {
+		padding: clamp(40px, 6vw, 72px) var(--gutter);
+	}
+
+	.sec {
+		margin-bottom: 24px;
+	}
+
+	.line {
+		max-width: 22ch;
+		font-size: clamp(26px, 3vw, 40px);
+		font-weight: 500;
+		line-height: 1.15;
+		letter-spacing: -0.035em;
+		text-wrap: balance;
+	}
+
+	.actions {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+		justify-content: flex-end;
+		min-width: 0;
+	}
+
+	.big {
+		justify-content: space-between;
+		padding: 20px 24px;
+		font-size: clamp(17px, 2vw, 24px);
+		letter-spacing: -0.02em;
+		overflow-wrap: anywhere;
+	}
+
+	nav {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		border: 1px solid var(--theme-rule);
+	}
+
+	@media (max-width: 520px) {
+		nav {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	nav .btn {
+		justify-content: center;
+		gap: 8px;
+		font-family: var(--theme-font-mono);
+		font-size: 12px;
+		font-weight: 400;
+		text-transform: uppercase;
+		border: none;
+		box-shadow: 1px 0 0 var(--theme-rule);
+	}
+
+	nav :global(svg) {
+		width: 1em;
+		height: 1em;
+	}
+</style>

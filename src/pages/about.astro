@@ -1,0 +1,90 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import { pages, roles, yearsInSoftware } from "@/consts";
+
+const companies = new Set(roles.map((role) => role.company)).size;
+---
+
+<BaseLayout title={pages.about.title} description={pages.about.description}>
+	<PageIntro label="1 About" title="Hi, I’m Tawsif.">
+		<p>
+			I’m a backend engineer based in Amsterdam. I’ve been building software since 2012, starting with web and mobile
+			applications in Dhaka and moving, over the years, to distributed backend services in Berlin, Eindhoven and
+			Amsterdam.
+		</p>
+		<p>
+			I’ve worked at startups, scale-ups and enterprises, including Polarsteps, Mollie, Sendcloud, HelloFresh and
+			Pathao. Along the way I’ve been an individual contributor, a tech lead and an engineering manager.
+		</p>
+		<p>
+			Most of my work sits around event-driven architecture, domain-driven design and hexagonal services. I reach for
+			the outbox pattern and event sourcing when the problem calls for them, and I try hard to keep systems boring to
+			operate. Pragmatic solutions and incremental delivery beat clever rewrites.
+		</p>
+		<p>
+			Outside work I build open-source developer tools, write about architecture and Nix, and keep a soft spot for
+			Elixir, which I’ve championed since 2017 and spoken about at several conferences.
+		</p>
+	</PageIntro>
+
+	<section class="split">
+		<div>
+			<p class="sec bar">§2 Quick facts</p>
+			<dl class="kv">
+				<div><dt>Based in</dt><dd>Amsterdam, Netherlands</dd></div>
+				<div><dt>Experience</dt><dd>{yearsInSoftware} years in software, {companies} companies</dd></div>
+				<div><dt>Domains</dt><dd>Travel · Payments · Logistics · Subscriptions · Lending</dd></div>
+				<div><dt>Languages</dt><dd>Go · Python · PHP · TypeScript · Elixir</dd></div>
+				<div><dt>Architecture</dt><dd>DDD · Event-driven · Hexagonal · Distributed systems</dd></div>
+			</dl>
+		</div>
+		<div class="bios">
+			<p class="sec">§3 Bios to copy</p>
+			<p class="caption">SHORT · FOR TALKS AND PRESS</p>
+			<blockquote>
+				Tawsif Aqib builds backend systems and the tools around them. Senior backend engineer at Polarsteps, based in
+				Amsterdam.
+			</blockquote>
+			<p class="caption">LONG</p>
+			<blockquote>
+				Tawsif Aqib is a backend engineer with more than a decade of experience building distributed systems across
+				travel, payments, logistics and subscriptions. He has worked at companies including Polarsteps, Mollie,
+				Sendcloud, HelloFresh and Pathao. He has been an individual contributor, tech lead and engineering manager, and
+				focuses on event-driven architecture, domain-driven design and systems that are easy to operate. Outside work
+				he builds open-source developer tools, writes about architecture and Nix, and has spoken at conferences on
+				Elixir and functional programming.
+			</blockquote>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.bar {
+		padding: 20px 24px;
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.kv {
+		font-size: 15px;
+	}
+
+	.bios {
+		padding: var(--block) var(--gutter);
+	}
+
+	.bios .caption {
+		margin: 24px 0 10px;
+		font-size: 11px;
+	}
+
+	blockquote {
+		max-width: 60ch;
+		padding: 16px 20px;
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--theme-text);
+		background: var(--theme-panel);
+		border-left: 2px solid var(--theme-accent);
+	}
+</style>

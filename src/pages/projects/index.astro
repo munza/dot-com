@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import ProjectGrid from "@/components/sheet/ProjectGrid.astro";
+import { pages } from "@/consts";
+import { getProjects } from "@/lib/posts";
+
+const projects = await getProjects();
+---
+
+<BaseLayout title={pages.projects.title} description={pages.projects.description}>
+	<PageIntro label="1 Modules — projects" title="Projects">
+		<p>Tools and products I’m building, in the order they ship. Each one comes from a problem I kept solving by hand.</p>
+	</PageIntro>
+	<section>
+		<ProjectGrid projects={projects} />
+	</section>
+</BaseLayout>
+
+<style>
+	section {
+		padding: var(--block) var(--gutter);
+	}
+</style>

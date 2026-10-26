@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EntryList from "@/components/sheet/EntryList.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import SectionHead from "@/components/sheet/SectionHead.astro";
+import { pages, uses } from "@/consts";
+---
+
+<BaseLayout title={pages.uses.title} description={pages.uses.description}>
+	<PageIntro label="1 Bill of materials — uses" title="Uses">
+		<p>
+			The hardware, software and configuration I work with every day. Most of it is declared in my
+			<a class="link" href="/projects/dotfiles/">dotfiles</a>, so you can reproduce it.
+		</p>
+	</PageIntro>
+	<section>
+		<SectionHead label="2 Components" />
+		<EntryList entries={uses} />
+	</section>
+</BaseLayout>
+
+<style>
+	section {
+		padding: var(--block) var(--gutter);
+	}
+</style>

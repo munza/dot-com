@@ -1,0 +1,59 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import SectionHead from "@/components/sheet/SectionHead.astro";
+import Toolkit from "@/components/sheet/Toolkit.astro";
+import WorkRows from "@/components/sheet/WorkRows.astro";
+import { pages, roles, workSummary, careerStartYear, yearsInSoftware } from "@/consts";
+import { numberWord } from "@/lib/words";
+
+const companies = new Set(roles.map((role) => role.company)).size;
+---
+
+<BaseLayout title={pages.work.title} description={pages.work.description}>
+	<PageIntro label="1 Revision history — work" title="Work">
+		<p>{numberWord(yearsInSoftware, { capitalize: true })} years of building software, from web and mobile apps in Dhaka to distributed backend services in the Netherlands.</p>
+	</PageIntro>
+
+	<section class="flush">
+		<p class="sec bar">§2 Summary</p>
+		<dl class="kv">{workSummary.map((entry) => <div><dt>{entry.label}</dt><dd>{entry.value}</dd></div>)}</dl>
+	</section>
+
+	<section class="block">
+		<SectionHead label="3 Roles"><p>{careerStartYear} → now · {roles.length} roles · {companies} companies</p></SectionHead>
+		<WorkRows roles={roles} />
+	</section>
+
+	<section class="block">
+		<SectionHead label="4 Toolkit" />
+		<div class="toolkit"><Toolkit /></div>
+	</section>
+</BaseLayout>
+
+<style>
+	section {
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	section:last-child {
+		border-bottom: none;
+	}
+
+	.block {
+		padding: var(--block) var(--gutter);
+	}
+
+	.bar {
+		padding: 20px 24px;
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.kv {
+		font-size: 15px;
+	}
+
+	.toolkit {
+		margin-top: 20px;
+	}
+</style>

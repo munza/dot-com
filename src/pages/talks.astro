@@ -1,0 +1,31 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import TalkRows from "@/components/sheet/TalkRows.astro";
+import { authorInfo, pages, talkTopics } from "@/consts";
+---
+
+<BaseLayout title={pages.talks.title} description={pages.talks.description}>
+	<PageIntro label="1 Talks" title="Talks">
+		<p>
+			Talks I’ve given, mostly on Elixir and functional programming. I’m open to speaking about backend architecture,
+			event-driven systems and developer tooling: <a class="link" href={`mailto:${authorInfo.email}`}>{authorInfo.email}</a>
+		</p>
+	</PageIntro>
+	<section>
+		<TalkRows />
+		<p class="caption topics">TOPICS I’D PROPOSE NEXT</p>
+		<div>{talkTopics.map((topic) => <span class="chip">{topic}</span>)}</div>
+	</section>
+</BaseLayout>
+
+<style>
+	section {
+		padding: var(--block) var(--gutter);
+	}
+
+	.topics {
+		margin: 36px 0 10px;
+		font-size: 11px;
+	}
+</style>

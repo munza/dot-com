@@ -1,0 +1,31 @@
+---
+import { toolkit } from "@/consts";
+---
+
+<dl>
+	{
+		toolkit.map((group) => (
+			<div>
+				<dt class="caption">{group.label.toUpperCase()}</dt>
+				<dd>
+					{group.items.map((item) => (
+						<span class="chip">{item}</span>
+					))}
+				</dd>
+			</div>
+		))
+	}
+</dl>
+
+<style>
+	dl {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	dt {
+		margin-bottom: 8px;
+		font-size: 11px;
+	}
+</style>

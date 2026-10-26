@@ -1,0 +1,36 @@
+---
+interface Props {
+	label: string;
+	title: string;
+}
+
+const { label, title } = Astro.props;
+---
+
+<section class="intro">
+	<p class="sec">§{label}</p>
+	<h1 class="display">{title}</h1>
+	<div class="lede"><slot /></div>
+</section>
+
+<style>
+	.intro {
+		padding: var(--block) var(--gutter);
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.sec {
+		margin-bottom: 24px;
+	}
+
+
+	.lede {
+		margin-top: 24px;
+		font-size: 17px;
+		line-height: 1.65;
+	}
+
+	.lede > :global(* + *) {
+		margin-top: 1em;
+	}
+</style>

@@ -1,0 +1,70 @@
+---
+import type { GetStaticPaths } from "astro";
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/consts";
+import { formatDate, getLocalPosts, readingTime, tagSlug } from "@/lib/posts";
+
+export const getStaticPaths = (async () => {
+	const posts = await getLocalPosts();
+	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, tags, heroImage, heroImageAlt } = post.data;
+---
+
+<BaseLayout title={`${title} · ${siteConfig.title}`} description={description} image={`/og/${post.id}.png`} type="article">
+	<article>
+		<header>
+			<p class="sec">§ Application note</p>
+			<h1 class="display">{title}</h1>
+			<p class="summary">{description}</p>
+			<p class="caption meta">
+				<time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+				{updatedDate && <> · Updated <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time></>}
+				{" · "}
+				{readingTime(post.body)} min read
+			</p>
+			<nav aria-label="Tags">{tags.map((tag) => <a class="chip" href={`/writing/tags/${tagSlug(tag)}/`}>#{tag}</a>)}</nav>
+		</header>
+		{heroImage && <Image src={heroImage} alt={heroImageAlt} widths={[768, 1536]} sizes="(min-width: 1240px) 1240px, 100vw" loading="eager" />}
+		<div class="prose"><Content /></div>
+	</article>
+</BaseLayout>
+
+<style>
+	header {
+		padding: var(--block) var(--gutter);
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.sec {
+		margin-bottom: 24px;
+	}
+
+
+	.summary {
+		max-width: 60ch;
+		margin-top: 20px;
+		font-size: 18px;
+		line-height: 1.6;
+		color: var(--theme-text);
+	}
+
+	.meta {
+		margin: 24px 0 12px;
+	}
+
+	img {
+		width: 100%;
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.prose {
+		padding: var(--block) var(--gutter);
+	}
+</style>

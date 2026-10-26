@@ -1,12 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <style>
-    rect { fill: #111111; }
-    path { stroke: #ffffff; }
+    .tile { fill: #16181b; }
+    .ink { fill: #ffffff; }
+    .accent { fill: #2f5bea; }
     @media (prefers-color-scheme: dark) {
-      rect { fill: #eeeeee; }
-      path { stroke: #111111; }
+      .tile { fill: #e6e8eb; }
+      .ink { fill: #16181b; }
+      .accent { fill: #2f5bea; }
     }
   </style>
-  <rect width="32" height="32" />
-  <path d="M8 24V8l8 10 8-10v16" fill="none" stroke-width="3" stroke-linecap="square" />
+  <rect class="tile" width="32" height="32" />
+  <!-- T -->
+  <rect class="ink" x="4" y="7" width="11" height="3.5" />
+  <rect class="ink" x="7.75" y="7" width="3.5" height="15" />
+  <!-- A: flat-topped, like a segment display -->
+  <rect class="ink" x="17" y="7" width="11" height="3.5" />
+  <rect class="ink" x="17" y="7" width="3.5" height="15" />
+  <rect class="ink" x="24.5" y="7" width="3.5" height="15" />
+  <rect class="ink" x="17" y="14" width="11" height="3" />
+  <!-- accent rule, like the active nav item -->
+  <rect class="accent" x="4" y="25" width="24" height="3" />
 </svg>

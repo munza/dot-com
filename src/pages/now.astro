@@ -1,0 +1,27 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EntryList from "@/components/sheet/EntryList.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import SectionHead from "@/components/sheet/SectionHead.astro";
+import { now, pages } from "@/consts";
+---
+
+<BaseLayout title={pages.now.title} description={pages.now.description}>
+	<PageIntro label="1 Current status — now" title="Now">
+		<p>
+			What I’m focused on this month. Updated {now.updated}. (A <a class="link" href="https://nownownow.com/about">now page</a>{" "}
+			is a short status update, not a résumé.)
+		</p>
+	</PageIntro>
+	<section>
+		<SectionHead label="2 Status"><p>Updated {now.updated}</p></SectionHead>
+		<EntryList entries={now.entries} />
+	</section>
+</BaseLayout>
+
+<style>
+	section {
+		padding: var(--block) var(--gutter);
+		background: var(--theme-panel);
+	}
+</style>

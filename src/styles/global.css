@@ -1,235 +1,521 @@
-/* Tailwind without its preflight reset: browser defaults are the starting point, refined by the element rules below. */
-@layer theme, base, components, utilities;
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Datasheet theme: a white sheet on a grey page, hairline rules, Geist + Geist Mono, one blue accent. */
+
 @theme inline {
-  --font-serif: var(--theme-font-body);
+  --font-sans: var(--theme-font-body);
   --font-mono: var(--theme-font-mono);
   --color-page: var(--theme-page);
   --color-foreground: var(--theme-foreground);
+  --color-accent: var(--theme-accent);
 }
 
 /* Tailwind only emits theme variables that utilities use, so element rules read these instead. */
 :root {
-  --theme-font-body: var(--font-source-serif), Georgia, serif;
-  --theme-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --theme-font-body: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --theme-font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --gutter: clamp(20px, 3vw, 40px);
+  --block: clamp(32px, 5vw, 56px);
 }
 
 /* Use hex values: src/lib/theme.ts reads them for the OG images, web manifest and theme-color tags. */
 :root {
   color-scheme: light;
-  --theme-page: #ffffff;
-  --theme-foreground: #111111;
-  --theme-link: #0000ee;
-  --theme-visited: #551a8b;
-  --theme-rule: #999999;
-  --theme-surface: #dddddd;
+  --theme-page: #e9ecef;
+  --theme-sheet: #ffffff;
+  --theme-foreground: #16181b;
+  --theme-on-ink: #ffffff;
+  --theme-text: #3a4047;
+  --theme-muted: #5b636c;
+  --theme-faint: #8a929b;
+  --theme-rule: #cdd2d8;
+  --theme-dash: #dce0e5;
+  --theme-dot: #b8bec6;
+  --theme-hover: #f3f5f7;
+  --theme-panel: #f7f8f9;
+  --theme-accent: #2f5bea;
+  --theme-accent-tint: #f4f7ff;
+  --theme-on-accent: #ffffff;
 }
 
 :root.dark {
   color-scheme: dark;
-  --theme-page: #111111;
-  --theme-foreground: #eeeeee;
-  --theme-link: #8ab4f8;
-  --theme-visited: #c58af9;
-  --theme-rule: #666666;
-  --theme-surface: #333333;
+  --theme-page: #0c0d0f;
+  --theme-sheet: #141619;
+  --theme-foreground: #e6e8eb;
+  --theme-on-ink: #141619;
+  --theme-text: #b4bac2;
+  --theme-muted: #8c949d;
+  --theme-faint: #6a727b;
+  --theme-rule: #2c3036;
+  --theme-dash: #24282d;
+  --theme-dot: #3d434a;
+  --theme-hover: #1b1e22;
+  --theme-panel: #181b1e;
+  --theme-accent: #7c9cff;
+  --theme-accent-tint: #1a2238;
+  --theme-on-accent: #0c0d0f;
 }
 
 @layer base {
   body {
-    max-width: 36rem;
-    margin: 0 auto;
-    padding: 1.5rem 1rem 4rem;
+    padding: clamp(0px, 3vw, 40px);
     font-family: var(--theme-font-body);
-    line-height: 1.5;
-    background: var(--theme-page);
+    font-variant-numeric: tabular-nums;
     color: var(--theme-foreground);
-  }
-
-  h1 {
-    margin: 0.5rem 0;
-    font-size: 2.75rem;
-    line-height: 1.1;
-  }
-
-  h2 {
-    margin-top: 1.5rem;
-  }
-
-  /* Site title: an <h1> on the home page and a <p> elsewhere, styled the same. */
-  body > header > :first-child {
-    margin: 0.5rem 0 0;
-    font-size: 2.75rem;
-    font-weight: bold;
-    line-height: 1.1;
-  }
-
-  body > header > :first-child a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  body > header > :nth-child(2) {
-    margin-top: 0.5rem;
-  }
-
-  /* Page headings below the site title are one step smaller. */
-  main h1 {
-    font-size: 2rem;
+    background: var(--theme-page);
   }
 
   a {
-    color: var(--theme-link);
-  }
-
-  a:visited {
-    color: var(--theme-visited);
-  }
-
-  a[aria-current="page"] {
     color: inherit;
-    font-weight: bold;
-    text-decoration: none;
   }
 
-  hr {
-    margin: 1.5rem 0;
-    border: 0;
-    border-top: 1px solid var(--theme-rule);
+  a:hover {
+    color: var(--theme-accent);
   }
 
-  /* Numbered section headings: "1. About", "2. Latest posts". */
-  main {
-    counter-reset: section;
+  ::selection {
+    color: var(--theme-on-accent);
+    background: var(--theme-accent);
   }
 
-  section > h2::before {
-    counter-increment: section;
-    content: counter(section) ". ";
-  }
-
-  /* Inline link lists: "Menu: About | Blog". */
-  nav {
-    margin: 1rem 0;
-    font-size: 0.875rem;
-  }
-
-  nav ul {
-    display: inline;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  nav li {
-    display: inline;
-  }
-
-  nav li + li::before {
-    content: " | ";
-  }
-
-  /* Icons from <Icon /> sit inline at text size; inline-block keeps the link underline off the icon and its gap. */
-  nav a > span {
-    display: inline-block;
-    margin-right: 0.35em;
-  }
-
-  nav svg {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
-  }
-
-  button {
-    padding: 0.3rem 0.8rem;
-    font: 0.8rem var(--theme-font-mono);
-    color: inherit;
-    background: var(--theme-surface);
-    border: 2px outset var(--theme-rule);
-    cursor: pointer;
-  }
-
-  button:active {
-    border-style: inset;
+  :focus-visible {
+    outline: 2px solid var(--theme-accent);
+    outline-offset: 3px;
   }
 
   code,
   kbd,
   samp,
-  pre,
-  time,
-  footer {
+  pre {
+    font-family: var(--theme-font-mono);
+  }
+}
+
+@layer components {
+  .mono {
     font-family: var(--theme-font-mono);
   }
 
-  code {
-    font-size: 0.875em;
+  /* Section label: "§3 THESIS & METHOD". */
+  .sec {
+    font-family: var(--theme-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--theme-accent);
   }
 
-  pre {
-    padding: 1rem;
+  /*
+   * Two columns that stack on narrow screens. The 1px gap shows the rule color through, so the
+   * divider is vertical side by side and horizontal when stacked, with no breakpoint to keep in sync.
+   */
+  .split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+    gap: 1px;
+    background: var(--theme-rule);
+  }
+
+  .split > * {
+    min-width: 0;
+    background: var(--theme-sheet);
+  }
+
+  /* Large page heading: home hero, page intros, post and project titles. */
+  .display {
+    max-width: 22ch;
+    font-size: clamp(34px, 4vw, 56px);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  /* Small mono caption: "How I work", "UPDATED OCT 2026". */
+  .caption {
+    font-family: var(--theme-font-mono);
+    font-size: 12px;
+    color: var(--theme-muted);
+  }
+
+  .lede {
+    max-width: 60ch;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--theme-text);
+  }
+
+  .btn,
+  .btn-solid {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 20px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--theme-foreground);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .btn:hover {
+    color: var(--theme-on-ink);
+    background: var(--theme-foreground);
+  }
+
+  .btn-solid {
+    color: var(--theme-on-ink);
+    background: var(--theme-foreground);
+  }
+
+  .btn-solid:hover {
+    color: var(--theme-on-accent);
+    background: var(--theme-accent);
+    border-color: var(--theme-accent);
+  }
+
+  .btn svg,
+  .btn-solid svg,
+  .icon-inline svg {
+    width: 1em;
+    height: 1em;
+  }
+
+  /* Underline-on-hover link used in section headers: "ALL POSTS →". */
+  .link {
+    padding: 8px 0;
+    text-decoration: none;
+    border-bottom: 1px solid var(--theme-dot);
+    transition: border-color 0.2s ease;
+  }
+
+  .link:hover {
+    border-color: var(--theme-accent);
+  }
+
+  /* Key–value spec list with a dotted leader: "Current ........ Senior Backend Engineer". */
+  .kv > div {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 13px 24px;
+    border-bottom: 1px dashed var(--theme-dash);
+    transition: background-color 0.2s ease;
+  }
+
+  .kv > div:hover {
+    background: var(--theme-hover);
+  }
+
+  .kv > div:last-child {
+    border-bottom: none;
+  }
+
+  .kv dt {
+    flex: none;
+    color: var(--theme-muted);
+  }
+
+  .kv > div::after {
+    order: 1;
+    flex: 1 1 12px;
+    min-width: 12px;
+    content: "";
+    border-bottom: 1px dotted var(--theme-dot);
+    transform: translateY(-4px);
+  }
+
+  .kv dd {
+    order: 2;
+    min-width: 0;
+    font-family: var(--theme-font-mono);
+    font-size: 14px;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .kv a {
+    text-decoration: none;
+  }
+
+  /* Table-like rows; set grid-template-columns on .rows per list. */
+  .rows-head,
+  .row {
+    display: grid;
+    grid-template-columns: var(--cols);
+    gap: 16px;
+    padding: 15px 16px;
+  }
+
+  .rows-head {
+    padding-block: 10px;
+    font-family: var(--theme-font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--theme-muted);
+    border-bottom: 1px solid var(--theme-foreground);
+  }
+
+  .row {
+    align-items: baseline;
+    text-decoration: none;
+    border-bottom: 1px dashed var(--theme-dash);
+    transition: background-color 0.2s ease;
+  }
+
+  .row:last-child {
+    border-bottom: none;
+  }
+
+  a.row:hover {
+    color: inherit;
+    background: var(--theme-hover);
+  }
+
+  .row .go {
+    display: inline-block;
+    color: var(--theme-faint);
+    transition:
+      transform 0.2s ease,
+      color 0.2s ease;
+  }
+
+  a.row:hover .go {
+    color: var(--theme-accent);
+    transform: translate(2px, -2px);
+  }
+
+  .row .meta {
+    font-family: var(--theme-font-mono);
+    font-size: 13px;
+    color: var(--theme-muted);
+  }
+
+  .row .dim {
+    color: var(--theme-muted);
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 4px 8px;
+    margin: 0 6px 6px 0;
+    font-family: var(--theme-font-mono);
+    font-size: 12px;
+    text-decoration: none;
+    border: 1px solid var(--theme-rule);
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .chip:hover {
+    border-color: var(--theme-foreground);
+  }
+
+  /* Status light: filled = in progress, outlined = planned. */
+  .led {
+    display: inline-block;
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background: var(--theme-accent);
+  }
+
+  .led.planned {
+    background: transparent;
+    border: 1px solid var(--theme-muted);
+  }
+
+  .led.live {
+    width: 7px;
+    height: 7px;
+    animation: blink 2.4s ease-in-out infinite;
+  }
+
+  @media (max-width: 760px) {
+    .rows-head,
+    .hide-sm {
+      display: none;
+    }
+
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+
+    /* Spec rows stack on phones: label above value, no dotted leader. */
+    .kv > div {
+      flex-direction: column;
+      gap: 2px;
+      align-items: flex-start;
+      padding: 12px 16px;
+    }
+
+    .kv > div::after {
+      display: none;
+    }
+
+    .kv dt {
+      font-size: 13px;
+    }
+
+    .kv dd {
+      text-align: left;
+    }
+  }
+}
+
+/* Markdown bodies of posts and project pages. */
+.prose {
+  max-width: 68ch;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--theme-text);
+
+  & > * + * {
+    margin-top: 1em;
+  }
+
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & h2,
+  & h3,
+  & h4 {
+    margin-top: 2em;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--theme-foreground);
+  }
+
+  & h2 {
+    font-size: 24px;
+  }
+
+  & h3 {
+    font-size: 20px;
+  }
+
+  & h4 {
+    font-size: 17px;
+  }
+
+  & a {
+    text-decoration-line: underline;
+    text-decoration-color: var(--theme-dot);
+    text-underline-offset: 3px;
+  }
+
+  & strong {
+    font-weight: 600;
+    color: var(--theme-foreground);
+  }
+
+  & ul,
+  & ol {
+    padding-left: 1.5em;
+  }
+
+  & ul {
+    list-style: square;
+  }
+
+  & ol {
+    list-style: decimal;
+  }
+
+  & li + li {
+    margin-top: 0.35em;
+  }
+
+  & li::marker {
+    color: var(--theme-muted);
+  }
+
+  & blockquote {
+    padding-left: 1em;
+    color: var(--theme-foreground);
+    border-left: 2px solid var(--theme-accent);
+  }
+
+  & :not(pre) > code {
+    padding: 1px 5px;
+    font-size: 0.85em;
+    background: var(--theme-panel);
+    border: 1px solid var(--theme-dash);
+  }
+
+  & pre {
+    padding: 16px;
     overflow-x: auto;
-    font-size: 0.875rem;
+    font-size: 14px;
+    line-height: 1.6;
     border: 1px solid var(--theme-rule);
   }
 
-  blockquote {
-    margin-left: 0;
-    padding-left: 1rem;
-    font-style: italic;
-    border-left: 3px solid var(--theme-rule);
-  }
-
-  table {
+  & table {
     width: 100%;
-    font-size: 0.875rem;
+    font-size: 15px;
     border-collapse: collapse;
   }
 
-  th,
-  td {
-    padding: 0.25rem 0.5rem;
+  & th,
+  & td {
+    padding: 8px 12px;
     text-align: left;
-    border: 1px solid var(--theme-foreground);
+    border-bottom: 1px dashed var(--theme-dash);
   }
 
-  th {
-    background: var(--theme-surface);
+  & th {
+    font-family: var(--theme-font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--theme-muted);
+    border-bottom: 1px solid var(--theme-foreground);
   }
 
-  caption {
-    padding-bottom: 0.25rem;
-    font: 0.75rem var(--theme-font-mono);
-    text-align: left;
-    caption-side: top;
+  & hr {
+    border-top: 1px solid var(--theme-rule);
   }
 
-  dt {
-    font-weight: bold;
+  & img {
+    border: 1px solid var(--theme-rule);
+  }
+}
+
+/* Shiki writes light colors inline; switch to its dark set with the theme. */
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
   }
 
-  img {
-    max-width: 100%;
-    height: auto;
+  50% {
+    opacity: 0.3;
   }
+}
 
-  footer {
-    font-size: 0.75rem;
-  }
-
-  footer p {
-    margin: 0.25rem 0;
-  }
-
-  /* Shiki writes light colors inline; switch to its dark set with the theme. */
-  .dark .astro-code,
-  .dark .astro-code span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
   }
 }
 

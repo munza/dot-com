@@ -6,10 +6,13 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  // Used for canonical, Open Graph, sitemap and RSS URLs; set to the real domain.
-  site: "https://example.com",
+  // Used for canonical, Open Graph, sitemap and RSS URLs.
+  site: "https://tawsifaqib.com",
 
   integrations: [sitemap()],
+
+  // Static site: no sessions, so the Cloudflare adapter doesn't add (and provision) a KV namespace for them.
+  session: false,
 
   env: {
     schema: {
@@ -31,11 +34,18 @@ export default defineConfig({
 
   fonts: [
     {
-      name: "Source Serif 4",
-      cssVariable: "--font-source-serif",
+      name: "Geist",
+      cssVariable: "--font-geist",
       provider: fontProviders.google(),
-      weights: ["400", "700"],
-      styles: ["normal", "italic"],
+      weights: ["300 700"],
+      styles: ["normal"],
+    },
+    {
+      name: "Geist Mono",
+      cssVariable: "--font-geist-mono",
+      provider: fontProviders.google(),
+      weights: ["400", "500"],
+      styles: ["normal"],
     },
   ],
 

@@ -1,0 +1,25 @@
+---
+import { talks } from "@/consts";
+---
+
+<div class="rows" style="--cols: minmax(0, 1.4fr) minmax(0, 1fr) 56px 72px">
+	<div class="rows-head" aria-hidden="true"><span>Talk</span><span>Event</span><span>Year</span><span>Slides</span></div>
+	{
+		talks.map((talk) => (
+			<a class="row" href={talk.slides}>
+				<span class="title">{talk.title}</span>
+				<span class="dim">{talk.event}</span>
+				<span class="meta">{talk.year}</span>
+				<span class="meta">
+					View <span class="go" aria-hidden="true">↗</span>
+				</span>
+			</a>
+		))
+	}
+</div>
+
+<style>
+	.title {
+		font-weight: 500;
+	}
+</style>

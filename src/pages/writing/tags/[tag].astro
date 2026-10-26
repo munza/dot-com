@@ -2,9 +2,9 @@
 import type { GetStaticPaths } from "astro";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Footer from "@/components/layout/Footer.astro";
-import Header from "@/components/layout/Header.astro";
-import PostList from "@/components/PostList.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import PostRows from "@/components/sheet/PostRows.astro";
+import { siteConfig } from "@/consts";
 import { getPosts, getTags, tagSlug } from "@/lib/posts";
 
 export const getStaticPaths = (async () => {
@@ -18,10 +18,17 @@ export const getStaticPaths = (async () => {
 const { name, posts } = Astro.props;
 ---
 
-<BaseLayout title={`Posts tagged #${name}`}>
-	<Header slot="header" />
-	<h1>#{name}</h1>
-	<p><a href="/blog">← All posts</a></p>
-	<PostList posts={posts} />
-	<Footer slot="footer" />
+<BaseLayout title={`#${name} · Writing · ${siteConfig.title}`}>
+	<PageIntro label="1 Application notes — by tag" title={`#${name}`}>
+		<p><a class="link" href="/writing">← All writing</a></p>
+	</PageIntro>
+	<section>
+		<PostRows posts={posts} />
+	</section>
 </BaseLayout>
+
+<style>
+	section {
+		padding: var(--block) var(--gutter);
+	}
+</style>

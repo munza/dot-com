@@ -1,0 +1,161 @@
+---
+import Masked from "@/components/ui/Masked.astro";
+import type { Project } from "@/lib/posts";
+
+interface Props {
+	projects: Project[];
+}
+
+const { projects } = Astro.props;
+const statusLabel = { "in-progress": "In progress", planned: "Planned" };
+---
+
+<ul class="grid">
+	{
+		projects.map((project, i) => {
+			const { kind, status, area, title, summary } = project.data;
+			const no = `M-${String(i + 1).padStart(2, "0")}`;
+			const led = (
+				<span
+					class:list={["led", { planned: status === "planned" }]}
+					role="img"
+					aria-label={statusLabel[status]}
+				/>
+			);
+			return (
+				<li>
+					{kind === "project" && (
+						<a class:list={["card", { planned: status === "planned" }]} href={`/projects/${project.id}/`}>
+							<span class="top">
+								<span>
+									{no} · {area.toUpperCase()}
+								</span>
+								{led}
+							</span>
+							<span class="name">
+								<Masked text={title} />
+							</span>
+							<span class="summary">{summary}</span>
+						</a>
+					)}
+					{kind === "reserved" && (
+						<div class="card reserved">
+							<span class="top">
+								<span>{no} · RESERVED</span>
+								<span class="tba">TBA</span>
+							</span>
+							<span class="name">{title}</span>
+							<span class="summary">{summary}</span>
+						</div>
+					)}
+				</li>
+			);
+		})
+	}
+</ul>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 20px;
+	}
+
+	@media (max-width: 1100px) {
+		.grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.card {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		min-height: 200px;
+		padding: 20px;
+		text-decoration: none;
+		border: 1px solid var(--theme-rule);
+		transition:
+			border-color 0.25s ease,
+			box-shadow 0.25s ease,
+			transform 0.25s ease;
+	}
+
+	a.card:hover {
+		color: inherit;
+		border-color: var(--theme-foreground);
+		box-shadow: 4px 4px 0 0 var(--theme-foreground);
+		transform: translate(-2px, -2px);
+	}
+
+	a.card:hover .led {
+		transform: scale(1.4);
+	}
+
+	.card.planned {
+		border-style: dashed;
+	}
+
+	/* Reserved: an empty slot on the sheet, hatched like an unused area of a drawing. */
+	.reserved {
+		background: repeating-linear-gradient(
+			-45deg,
+			transparent 0 9px,
+			var(--theme-dash) 9px 10px
+		);
+		border-style: dashed;
+	}
+
+	.reserved .name {
+		align-self: flex-start;
+		padding: 2px 8px 4px;
+		margin-left: -8px;
+		background: var(--theme-sheet);
+	}
+
+	.reserved .summary {
+		align-self: flex-start;
+		padding: 2px 8px;
+		margin-left: -8px;
+		background: var(--theme-sheet);
+	}
+
+	.tba {
+		padding: 1px 6px;
+		color: var(--theme-accent);
+		border: 1px solid var(--theme-accent);
+	}
+
+	.top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-family: var(--theme-font-mono);
+		font-size: 11px;
+		color: var(--theme-muted);
+	}
+
+	.led {
+		transition: transform 0.25s ease;
+	}
+
+	.name {
+		padding-top: 40px;
+		margin: auto 0 8px;
+		font-size: 22px;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+	}
+
+	.summary {
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--theme-text);
+	}
+</style>

@@ -1,16 +1,229 @@
 ---
-import Navigation from "@/components/layout/Navigation.astro";
 import ThemeToggle from "@/components/ui/ThemeToggle.astro";
-import { authorInfo, navLinks, siteConfig } from "@/consts";
+import Icon from "@/components/ui/Icon.astro";
+import { authorInfo, navLinks, nowLine, siteConfig } from "@/consts";
 
-// The site title is the page heading only on the home page; other pages have their own <h1>.
-const Title = Astro.url.pathname === "/" ? "h1" : "p";
+// "/" is current only on the home page; other links also match their subpages.
+function isCurrent(href: string): boolean {
+	const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+	return href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+}
+
+const current = navLinks.find((link) => isCurrent(link.href));
 ---
 
 <header>
-	<Title><a href="/">{siteConfig.title}</a></Title>
-	<p><strong>{authorInfo.designation}.</strong> {authorInfo.location}.</p>
-	<p><ThemeToggle /></p>
-	<Navigation links={navLinks} label="Menu" />
-	<hr />
+	<div class="strip">
+		<a class="cell id" href="/">
+			<span class="name">{siteConfig.title.toUpperCase()}</span>
+			<span>DOC {siteConfig.docId} · REV {siteConfig.revision}</span>
+		</a>
+		<a class="cell now" href="/now">
+			<span>NOW</span>
+			<span class="status"><span class="led live" aria-hidden="true"></span>{nowLine}</span>
+		</a>
+		<a class="cell email btn-solid" href={`mailto:${authorInfo.email}`}>
+			<span>{authorInfo.email}</span>
+			<span class="icon-inline"><Icon icon="arrow-up-right" aria-hidden="true" /></span>
+		</a>
+	</div>
+	<nav aria-label="Main navigation" data-nav>
+		<button type="button" class="menu" aria-expanded="false" aria-controls="nav-links" data-nav-toggle>
+			Menu{current && <span class="where">· {current.label}</span>}
+		</button>
+		<div class="links" id="nav-links">
+			{
+				navLinks.map((link) => (
+					<a href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>
+						{link.label}
+					</a>
+				))
+			}
+		</div>
+		<ThemeToggle />
+	</nav>
 </header>
+
+<style>
+	header {
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.strip {
+		display: flex;
+		flex-wrap: wrap;
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.cell {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		min-width: 0;
+		padding: 16px 24px;
+		font-family: var(--theme-font-mono);
+		font-size: 12px;
+		color: var(--theme-muted);
+		text-decoration: none;
+		border-right: 1px solid var(--theme-rule);
+	}
+
+	.id {
+		flex: 1 1 240px;
+	}
+
+	.name,
+	.status {
+		color: var(--theme-foreground);
+	}
+
+	.now {
+		flex: 3 1 320px;
+	}
+
+	.now:hover .status {
+		color: var(--theme-accent);
+	}
+
+	.status {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+	}
+
+	/* The email cell reuses .btn-solid colors but keeps the strip's cell shape. */
+	.email {
+		flex: 1 1 220px;
+		flex-direction: row;
+		justify-content: space-between;
+		min-height: 0;
+		font-size: 13px;
+		font-weight: 400;
+		color: var(--theme-on-ink);
+		border: none;
+	}
+
+	.email:hover {
+		color: var(--theme-on-accent);
+	}
+
+	nav {
+		display: flex;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	nav::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* On wide screens the links sit straight in the nav row; the Menu button only shows on narrow ones. */
+	.links {
+		display: contents;
+	}
+
+	.menu {
+		display: none;
+	}
+
+	/* Links and the two buttons; the toggle's script tag also lands in the nav, so don't match every child. */
+	.links > a,
+	nav > :global(button) {
+		display: flex;
+		flex: 1 0 auto;
+		gap: 8px;
+		align-items: center;
+		justify-content: center;
+		min-height: 52px;
+		padding: 0 18px;
+		font-family: var(--theme-font-mono);
+		font-size: 12px;
+		text-transform: uppercase;
+		white-space: nowrap;
+		text-decoration: none;
+		border-right: 1px solid var(--theme-rule);
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	nav > :global(button) {
+		cursor: pointer;
+		border-right: none;
+	}
+
+	.links > a:hover,
+	nav > :global(button:hover) {
+		color: var(--theme-on-ink);
+		background: var(--theme-foreground);
+	}
+
+	.links > [aria-current="page"] {
+		color: var(--theme-accent);
+		box-shadow: inset 0 -2px 0 var(--theme-accent);
+	}
+
+	/* Narrow screens: "Menu" and the theme toggle on one row, the links fold out below. */
+	@media (max-width: 760px) {
+		nav {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			overflow: visible;
+		}
+
+		.menu {
+			display: flex;
+			justify-content: flex-start;
+			border-right: 1px solid var(--theme-rule);
+		}
+
+		.where {
+			margin-left: 4px;
+			color: var(--theme-accent);
+		}
+
+		.menu:hover .where {
+			color: inherit;
+		}
+
+		.links {
+			display: none;
+			grid-row: 2;
+			grid-column: 1 / -1;
+			flex-direction: column;
+		}
+
+		nav[data-open] .links {
+			display: flex;
+		}
+
+		.links > a {
+			justify-content: flex-start;
+			border-top: 1px solid var(--theme-rule);
+			border-right: none;
+		}
+
+		.links > [aria-current="page"] {
+			box-shadow: inset 2px 0 0 var(--theme-accent);
+		}
+	}
+</style>
+
+<script>
+	// Delegated so it keeps working after ClientRouter swaps the page; a new page starts with the menu closed.
+	document.addEventListener("click", (event) => {
+		const toggle = event.target instanceof Element && event.target.closest("[data-nav-toggle]");
+		if (!toggle) return;
+		const nav = toggle.closest("[data-nav]");
+		const open = !nav?.hasAttribute("data-open");
+		nav?.toggleAttribute("data-open", open);
+		toggle.setAttribute("aria-expanded", String(open));
+	});
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key !== "Escape") return;
+		const nav = document.querySelector("[data-nav][data-open]");
+		nav?.removeAttribute("data-open");
+		nav?.querySelector("[data-nav-toggle]")?.setAttribute("aria-expanded", "false");
+	});
+</script>

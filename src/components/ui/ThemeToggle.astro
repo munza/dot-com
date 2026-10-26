@@ -1,25 +1,29 @@
-<button type="button" aria-pressed="false" data-theme-toggle>
-	dark mode? <span class="dark:hidden">no.</span><span class="hidden dark:inline">yes.</span>
+---
+import Icon from "@/components/ui/Icon.astro";
+---
+
+<!-- The visible "Dark"/"Light" is the button's name: it says what a click switches to. -->
+<button type="button" data-theme-toggle>
+	<span class="icon-inline dark:hidden"><Icon icon="moon" aria-hidden="true" /></span>
+	<span class="icon-inline hidden dark:inline"><Icon icon="sun" aria-hidden="true" /></span>
+	<span class="dark:hidden">Dark<span class="sr-only"> mode</span></span><span class="hidden dark:inline">Light<span class="sr-only"> mode</span></span>
 </button>
 
-<script>
-	function updateToggles() {
-		const isDark = document.documentElement.classList.contains("dark");
-		document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
-			toggle.setAttribute("aria-pressed", String(isDark));
-		});
+<style>
+	button {
+		cursor: pointer;
 	}
+</style>
 
+<script>
 	// Delegated so it keeps working after ClientRouter swaps the page.
 	document.addEventListener("click", (event) => {
 		if (!(event.target instanceof Element) || !event.target.closest("[data-theme-toggle]")) return;
 		const isDark = document.documentElement.classList.toggle("dark");
-		updateToggles();
 		try {
 			localStorage.setItem("theme", isDark ? "dark" : "light");
 		} catch {
 			// Storage blocked: the choice lasts until the next full page load.
 		}
 	});
-	document.addEventListener("astro:page-load", updateToggles);
 </script>

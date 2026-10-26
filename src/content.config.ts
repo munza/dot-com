@@ -16,10 +16,30 @@ const postsCollection = defineCollection({
         .default([]),
       heroImage: image().optional(),
       heroImageAlt: z.string().default(""),
+      // Posts still hosted elsewhere (e.g. Medium): listed here, linked out, no page of their own.
+      externalUrl: z.url().optional(),
       draft: z.boolean().default(false),
     }),
 });
 
+const projectsCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    area: z.string(),
+    status: z.enum(["in-progress", "planned"]),
+    // "reserved": an open slot for something not decided yet, with no page.
+    // To partly hide a name, write "▮" for each hidden letter in the title (see src/lib/mask.ts).
+    kind: z.enum(["project", "reserved"]).default("project"),
+    repo: z.url().optional(),
+    // Project homepage or docs, when it has one.
+    site: z.url().optional(),
+    order: z.number(),
+  }),
+});
+
 export const collections = {
   posts: postsCollection,
+  projects: projectsCollection,
 };

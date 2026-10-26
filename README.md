@@ -1,6 +1,6 @@
-# dot-com
+# tawsifaqib.com
 
-An Astro starter theme with a blog, light and dark mode, SEO, and Cloudflare deployment. Restyle it by changing a few CSS variables; content is Markdown.
+Personal site of Tawsif Aqib, built with Astro. The design is a "datasheet": a white sheet on a grey page, hairline rules, numbered `§` sections, Geist and Geist Mono, and one blue accent, with a matching dark theme.
 
 ## Quick start
 
@@ -11,36 +11,55 @@ npm install
 npm run dev
 ```
 
-Then:
+## Where the content lives
 
-1. Set `site` in `astro.config.mjs` to your domain. Canonical URLs, Open Graph tags, the sitemap and RSS all use it.
-2. Edit `src/consts.ts`: site title and description, author, navigation and social links. The header shows the site title with the author's `designation` and `location` as its subtitle. The demo persona (Mara Lindqvist) and her links are made up.
-3. Replace `public/favicon.svg` with your own square SVG. `favicon.ico` and the PNG app icons are generated from it at build time. A `prefers-color-scheme: dark` block inside the SVG changes the browser-tab icon in dark mode; the generated files use the light colors.
-4. Write posts in `src/content/posts/` and delete the samples. Keep `markdown-style-guide.md` while you restyle; it shows every element the theme styles.
+| What                                                       | Where                                                          |
+| ---------------------------------------------------------- | -------------------------------------------------------------- |
+| Name, email, links, navigation, page titles and meta       | `src/consts.ts`                                                |
+| Method, talks, work history, toolkit, Now and Uses entries | `src/consts.ts`                                                |
+| Header status line ("NOW · …")                             | `nowLine` in `src/consts.ts`                                   |
+| Home NOW band and headline                                 | `nowHighlight`, `headline` in `src/consts.ts`                  |
+| Years in software ("14 yrs", "Fourteen years")             | `careerStartYear` in `src/consts.ts`; worked out at build time |
+| Planned posts ("In preparation")                           | `plannedPosts` in `src/consts.ts`                              |
+| Posts                                                      | `src/content/posts/*.md`                                       |
+| Projects and their pages                                   | `src/content/projects/*.md`                                    |
+| About text and bios                                        | `src/pages/about.astro`                                        |
+| Home page copy                                             | `src/pages/index.astro`                                        |
+| Which home sections show (§ numbers follow)                | `homeSections` in `src/consts.ts`                              |
+| Favicon (the PNG icons and `favicon.ico` are generated)    | `public/favicon.svg`                                           |
+
+Text in `[brackets]` is still to be filled in: the Uses entries, project details and repo links.
 
 ## Features
 
-- **Brutalist styling**: semantic HTML on top of the browser's default styles, a serif and a monospace font, six colors, and almost no classes. Tailwind CSS v4 is still available for utilities.
-- **Dark mode**: follows the system setting, has a toggle that remembers the choice, and doesn't flash the wrong theme on load.
-- **Blog**: Markdown posts with a typed schema, drafts, tag pages with URL-safe slugs, reading time, and optimized hero images.
-- **SEO**: canonical URL, Open Graph and Twitter tags, a generated OG image per post, sitemap, `robots.txt` and RSS feed.
+- **Pages**: Home, About, Projects (one page per project), Writing (with tag pages), Talks, Work, Now, Uses and a 404 page.
+- **Light and dark**: follows the system setting, has a toggle in the nav that remembers the choice, and doesn't flash the wrong theme on load.
+- **Writing**: Markdown posts with a typed schema, drafts, tag pages with URL-safe slugs, reading time and optimized hero images. Posts still on Medium are listed and linked out until they move here.
+- **SEO**: canonical URL, Open Graph and Twitter tags, generated OG images (site, each post and each project), sitemap, `robots.txt` and RSS.
 - **Icons from one SVG**: `favicon.svg` is served as is and rendered to `favicon.ico`, the apple-touch-icon and the web manifest icons.
 - **Page transitions**: Astro's `<ClientRouter />`.
-- **Accessibility**: skip link, labelled navigation with `aria-current`, and reduced-motion support.
+- **Accessibility**: skip link, labelled navigation with `aria-current`, visible focus rings and reduced-motion support.
 - **Tooling**: strict TypeScript, oxlint, oxfmt, `astro check`, build smoke tests, and GitHub Actions CI running in the same Nix dev shell.
 
 ## Theming
 
-The theme is brutalist: Tailwind is loaded without its CSS reset, so the browser's default styles (heading sizes, list bullets, underlined links, native buttons) are the design. Components are semantic HTML with almost no classes.
+All colors are `--theme-*` variables in `src/styles/global.css`: `:root` holds the light theme and `:root.dark` the dark one. Keep them as hex values: the OG images, web manifest and `theme-color` meta tags read them at build time.
 
-To restyle it, edit `src/styles/global.css`:
+| Token                                                        | Used for                                       |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| `--theme-page`                                               | The grey page behind the sheet                 |
+| `--theme-sheet`                                              | The sheet itself                               |
+| `--theme-foreground`, `--theme-on-ink`                       | Text and solid (inked) fills, and text on them |
+| `--theme-text`, `--theme-muted`, `--theme-faint`             | Body copy, labels, hints                       |
+| `--theme-rule`, `--theme-dash`, `--theme-dot`                | Solid, dashed and dotted rules                 |
+| `--theme-hover`, `--theme-panel`                             | Row hover and tinted panels                    |
+| `--theme-accent`, `--theme-accent-tint`, `--theme-on-accent` | The blue accent                                |
 
-- Six colors in `:root` (light) and `:root.dark` (dark): `--theme-page`, `--theme-foreground`, `--theme-link`, `--theme-visited`, `--theme-rule` (rules and borders) and `--theme-surface` (buttons, table headers). Keep them as hex values: the OG images, web manifest and `theme-color` meta tags read them at build time.
-- The `@layer base` block holds the element rules: page width, fonts, links, rules, buttons, inline nav lists, tables, code and numbered section headings. Add element rules there rather than classes on components.
+Patterns used on several pages are classes in `global.css`: `.split` (two columns with a hairline divider that stack on narrow screens), `.display` (large page heading), `.sec` (section label), `.caption`, `.lede`, `.btn` and `.btn-solid`, `.link`, `.kv` (spec list with dotted leaders), `.rows` / `.row` (table-like rows; set `--cols` for the grid), `.chip` and `.led` (status light). Anything used once lives in its component's scoped `<style>`.
 
-Body text uses Source Serif 4, loaded through `fonts` in `astro.config.mjs`; code, dates, buttons and the footer use the system monospace font. Both font stacks are `--theme-font-body` and `--theme-font-mono` in `global.css`. The OG images use `@fontsource/source-serif-4` (`src/lib/og.ts`); change both together.
+Fonts are Geist and Geist Mono, loaded through `fonts` in `astro.config.mjs`. The OG images use `@fontsource/geist-sans` and `@fontsource/geist-mono` (`src/lib/og.ts`); change both together.
 
-## Blog posts
+## Posts
 
 Each post is a Markdown file in `src/content/posts/`. The schema is in `src/content.config.ts`:
 
@@ -50,37 +69,45 @@ title: Post title
 description: One sentence, used in lists, RSS and the OG image.
 pubDate: 2026-10-01
 updatedDate: 2026-10-20 # optional
-tags: [astro]
+tags: [Architecture]
 heroImage: "@/assets/posts/cover.png" # optional
 heroImageAlt: Describe the image
-draft: true # optional; drafts show only in `npm run dev`
+externalUrl: https://medium.com/… # optional; listed and linked out, no page here
+draft: true # optional; never listed, previewable by URL in `npm run dev`
 ---
 ```
 
-The file name becomes the URL: `on-call-alerts.md` is served at `/blog/on-call-alerts/`.
+The file name becomes the URL: `event-sourcing.md` is served at `/writing/event-sourcing/`. To move a post from Medium, paste its text below the frontmatter and remove `externalUrl`.
 
-Put post images in `src/assets/posts/` and reference them with the `@/` alias, as above. Astro's `image()` schema helper resolves the path, checks that the file exists, and outputs resized WebP versions at build time. A path relative to the Markdown file (`./cover.png`) also works.
+Put post images in `src/assets/posts/` and reference them with the `@/` alias, as above. Astro's `image()` schema helper resolves the path, checks that the file exists, and outputs resized WebP versions at build time.
 
-## Analytics
+`markdown-style-guide.md` is a draft that shows every element the post styles cover. Drafts never appear in lists or RSS; in `npm run dev`, open one by its URL, e.g. `/writing/markdown-style-guide/`.
 
-Copy `.env.example` to `.env` and set `PUBLIC_ANALYTICS_SCRIPT_URL` to your analytics script, for example a Plausible or Umami script URL. Nothing is loaded when it's unset. Use a tool that tracks history-based page changes, because page transitions don't do full page loads.
+## Projects
+
+Each project is a Markdown file in `src/content/projects/` with `title`, `summary`, `area`, `status` (`in-progress` or `planned`), `order`, and optionally `repo` and `site`. The body follows the five-part template: What it is, Why I built it, What you get, Get started, Status.
+
+To partly hide a name, write `▮` for each hidden letter in the title, for example `Ku▮▮▮▮▮▮`; it shows as dark boxes on the site and in the OG image. Keep the full name out of the file and its file name, because the repo is public.
+
+`kind: reserved` makes a card that has no page:
+
+- `reserved`: a hatched "To be announced" slot for whatever comes next.
 
 ## Project structure
 
 ```text
 src/
 ├── components/
-│   ├── layout/       Head (SEO), Header, Footer, Navigation, Section, SkipLink, ScrollToTop
-│   ├── ui/           Icon, ThemeToggle
-│   └── PostList, TagList
-├── assets/posts/     images for blog posts
-├── content/posts/    Markdown blog posts
-├── icons/            SVG icons used by <Icon /> (the footer's social links)
-├── layouts/          BaseLayout
-├── lib/              posts, theme colors, OG images, favicon rendering
+│   ├── layout/       Head (SEO), Header, Footer (contact), SkipLink, ScrollToTop
+│   ├── sheet/        datasheet blocks: SectionHead, PageIntro, PostRows, TalkRows, WorkRows, ProjectGrid, Toolkit, EntryList
+│   └── ui/           Icon, ThemeToggle
+├── content/          posts and projects (Markdown)
+├── icons/            SVG icons used by <Icon />
+├── layouts/          BaseLayout (page, sheet, colophon)
+├── lib/              posts and projects, theme colors, OG images, favicon rendering
 ├── pages/            routes, including rss.xml, robots.txt, the manifest, favicon.ico and generated images
-├── styles/global.css colors and element styles
-└── consts.ts         site config, navigation and social links
+├── styles/global.css tokens, shared classes and Markdown styles
+└── consts.ts         site content and configuration
 ```
 
 ## Commands
@@ -97,4 +124,18 @@ src/
 
 ## Deployment
 
-The site deploys to Cloudflare Workers with `npx wrangler deploy` after `npm run build`. Images are optimized at build time, so no Cloudflare Images binding is needed. To deploy somewhere else, remove the Cloudflare adapter from `astro.config.mjs` and the site builds as plain static files.
+The site deploys to **Cloudflare Workers** as static assets: every page is prerendered, so `npm run build` writes the files to `dist/client/` along with a generated `wrangler.json`, and there's no server code. Unknown URLs get `404.html` with a 404 status (`not_found_handling` in `wrangler.jsonc`).
+
+Deploy from your machine:
+
+```sh
+npx wrangler login     # once
+npm run build
+npx wrangler deploy    # uses the generated config in dist/client/
+```
+
+Or connect the GitHub repo in the Cloudflare dashboard (Workers & Pages → Create → Import a repository) with build command `npm run build` and deploy command `npx wrangler deploy`, and set the build variable `NODE_VERSION=24`.
+
+The domain: with `tawsifaqib.com` on Cloudflare DNS, add it under the Worker's Settings → Domains & Routes → Custom domain. Add `www.tawsifaqib.com` too and redirect it to the bare domain with a redirect rule.
+
+To deploy somewhere else, remove the Cloudflare adapter from `astro.config.mjs`; the site then builds as plain static files in `dist/`.

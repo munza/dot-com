@@ -1,0 +1,34 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/sheet/PageIntro.astro";
+import PostRows from "@/components/sheet/PostRows.astro";
+import { pages, showPlannedPosts } from "@/consts";
+import { getPosts, getTags, tagSlug } from "@/lib/posts";
+
+const posts = await getPosts();
+---
+
+<BaseLayout title={pages.writing.title} description={pages.writing.description}>
+	<PageIntro label="1 Application notes — writing" title="Writing">
+		<p>
+			Notes on backend architecture, developer tooling and engineering teams. Also on Medium, but this is the original
+			home. <a class="link" href="/rss.xml">Subscribe via RSS →</a>
+		</p>
+	</PageIntro>
+	<section>
+		<nav aria-label="Tags">
+			{getTags(posts).map((tag) => <a class="chip" href={`/writing/tags/${tagSlug(tag)}/`}>#{tag}</a>)}
+		</nav>
+		<PostRows posts={posts} planned={showPlannedPosts} />
+	</section>
+</BaseLayout>
+
+<style>
+	section {
+		padding: var(--block) var(--gutter);
+	}
+
+	nav {
+		margin-bottom: 24px;
+	}
+</style>

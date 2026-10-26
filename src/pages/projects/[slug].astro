@@ -1,0 +1,84 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render } from "astro:content";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/ui/Icon.astro";
+import Masked from "@/components/ui/Masked.astro";
+import { siteConfig } from "@/consts";
+import { getProjects, getProjectPages } from "@/lib/posts";
+
+export const getStaticPaths = (async () => {
+	// The M-number counts every card on the grid, so it matches the card that links here.
+	const all = await getProjects();
+	const projects = await getProjectPages();
+	return projects.map((project) => ({ params: { slug: project.id }, props: { project, index: all.findIndex((p) => p.id === project.id) } }));
+}) satisfies GetStaticPaths;
+
+const { project, index } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, area, status, repo, site } = project.data;
+const statusLabel = status === "planned" ? "Planned" : "In progress";
+---
+
+<BaseLayout title={`${title} · ${siteConfig.title}`} description={summary} image={`/og/projects/${project.id}.png`}>
+	<article>
+		<header>
+			<p class="sec">§ M-{String(index + 1).padStart(2, "0")} · {area}</p>
+			<h1 class="display"><Masked text={title} /></h1>
+			<p class="summary">{summary}</p>
+			<dl class="kv">
+				<div><dt>Status</dt><dd><span class:list={["led", { planned: status === "planned" }]} aria-hidden="true"></span> {statusLabel}</dd></div>
+				{repo && <div><dt>Repository</dt><dd><a href={repo}>{repo.replace("https://", "")}</a></dd></div>}
+				{site && <div><dt>Docs</dt><dd><a href={site}>{site.replace("https://", "").replace(/\/$/, "")}</a></dd></div>}
+			</dl>
+			<div class="actions">
+				{repo && <a class="btn-solid" href={repo}>View the repo <Icon icon="arrow-up-right" aria-hidden="true" /></a>}
+				<a class="btn" href="/projects">All projects</a>
+			</div>
+		</header>
+		<div class="prose"><Content /></div>
+	</article>
+</BaseLayout>
+
+<style>
+	header {
+		padding: var(--block) var(--gutter);
+		border-bottom: 1px solid var(--theme-rule);
+	}
+
+	.sec {
+		margin-bottom: 24px;
+	}
+
+
+	.summary {
+		max-width: 52ch;
+		margin-top: 20px;
+		font-size: 18px;
+		line-height: 1.6;
+		color: var(--theme-text);
+	}
+
+	.kv {
+		max-width: 560px;
+		margin-top: 28px;
+		font-size: 15px;
+		border: 1px solid var(--theme-rule);
+	}
+
+	.kv .led {
+		margin-right: 6px;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 28px;
+	}
+
+	.prose {
+		padding: var(--block) var(--gutter);
+	}
+</style>
