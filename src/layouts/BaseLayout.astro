@@ -1,0 +1,35 @@
+---
+import "@/styles/global.css";
+
+import Head from "@/components/layout/Head.astro";
+import ScrollToTop from "@/components/layout/ScrollToTop.astro";
+import SkipLink from "@/components/layout/SkipLink.astro";
+import { siteConfig } from "@/consts";
+
+interface Props {
+	title: string;
+	description?: string;
+	image?: string;
+	type?: "website" | "article";
+}
+
+const { title, description, image, type } = Astro.props;
+const pageTitle = `${siteConfig.title} – ${title}`;
+---
+
+<html lang="en">
+	<head>
+		<Head title={pageTitle} description={description} image={image} type={type}>
+			<slot name="head" />
+		</Head>
+	</head>
+	<body>
+		<SkipLink />
+		<slot name="header" />
+		<main id="main-content">
+			<slot />
+		</main>
+		<slot name="footer" />
+		<ScrollToTop />
+	</body>
+</html>

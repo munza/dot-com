@@ -1,0 +1,16 @@
+---
+import Navigation from "@/components/layout/Navigation.astro";
+import ThemeToggle from "@/components/ui/ThemeToggle.astro";
+import { authorInfo, navLinks, siteConfig } from "@/consts";
+
+// The site title is the page heading only on the home page; other pages have their own <h1>.
+const Title = Astro.url.pathname === "/" ? "h1" : "p";
+---
+
+<header>
+	<Title><a href="/">{siteConfig.title}</a></Title>
+	<p><strong>{authorInfo.designation}.</strong> {authorInfo.location}.</p>
+	<p><ThemeToggle /></p>
+	<Navigation links={navLinks} label="Menu" />
+	<hr />
+</header>

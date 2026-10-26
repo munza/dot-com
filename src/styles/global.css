@@ -1,0 +1,240 @@
+/* Tailwind without its preflight reset: browser defaults are the starting point, refined by the element rules below. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-serif: var(--theme-font-body);
+  --font-mono: var(--theme-font-mono);
+  --color-page: var(--theme-page);
+  --color-foreground: var(--theme-foreground);
+}
+
+/* Tailwind only emits theme variables that utilities use, so element rules read these instead. */
+:root {
+  --theme-font-body: var(--font-source-serif), Georgia, serif;
+  --theme-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Use hex values: src/lib/theme.ts reads them for the OG images, web manifest and theme-color tags. */
+:root {
+  color-scheme: light;
+  --theme-page: #ffffff;
+  --theme-foreground: #111111;
+  --theme-link: #0000ee;
+  --theme-visited: #551a8b;
+  --theme-rule: #999999;
+  --theme-surface: #dddddd;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --theme-page: #111111;
+  --theme-foreground: #eeeeee;
+  --theme-link: #8ab4f8;
+  --theme-visited: #c58af9;
+  --theme-rule: #666666;
+  --theme-surface: #333333;
+}
+
+@layer base {
+  body {
+    max-width: 36rem;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+    font-family: var(--theme-font-body);
+    line-height: 1.5;
+    background: var(--theme-page);
+    color: var(--theme-foreground);
+  }
+
+  h1 {
+    margin: 0.5rem 0;
+    font-size: 2.75rem;
+    line-height: 1.1;
+  }
+
+  h2 {
+    margin-top: 1.5rem;
+  }
+
+  /* Site title: an <h1> on the home page and a <p> elsewhere, styled the same. */
+  body > header > :first-child {
+    margin: 0.5rem 0 0;
+    font-size: 2.75rem;
+    font-weight: bold;
+    line-height: 1.1;
+  }
+
+  body > header > :first-child a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  body > header > :nth-child(2) {
+    margin-top: 0.5rem;
+  }
+
+  /* Page headings below the site title are one step smaller. */
+  main h1 {
+    font-size: 2rem;
+  }
+
+  a {
+    color: var(--theme-link);
+  }
+
+  a:visited {
+    color: var(--theme-visited);
+  }
+
+  a[aria-current="page"] {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  hr {
+    margin: 1.5rem 0;
+    border: 0;
+    border-top: 1px solid var(--theme-rule);
+  }
+
+  /* Numbered section headings: "1. About", "2. Latest posts". */
+  main {
+    counter-reset: section;
+  }
+
+  section > h2::before {
+    counter-increment: section;
+    content: counter(section) ". ";
+  }
+
+  /* Inline link lists: "Menu: About | Blog". */
+  nav {
+    margin: 1rem 0;
+    font-size: 0.875rem;
+  }
+
+  nav ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav li {
+    display: inline;
+  }
+
+  nav li + li::before {
+    content: " | ";
+  }
+
+  /* Icons from <Icon /> sit inline at text size; inline-block keeps the link underline off the icon and its gap. */
+  nav a > span {
+    display: inline-block;
+    margin-right: 0.35em;
+  }
+
+  nav svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+  }
+
+  button {
+    padding: 0.3rem 0.8rem;
+    font: 0.8rem var(--theme-font-mono);
+    color: inherit;
+    background: var(--theme-surface);
+    border: 2px outset var(--theme-rule);
+    cursor: pointer;
+  }
+
+  button:active {
+    border-style: inset;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre,
+  time,
+  footer {
+    font-family: var(--theme-font-mono);
+  }
+
+  code {
+    font-size: 0.875em;
+  }
+
+  pre {
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    border: 1px solid var(--theme-rule);
+  }
+
+  blockquote {
+    margin-left: 0;
+    padding-left: 1rem;
+    font-style: italic;
+    border-left: 3px solid var(--theme-rule);
+  }
+
+  table {
+    width: 100%;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.25rem 0.5rem;
+    text-align: left;
+    border: 1px solid var(--theme-foreground);
+  }
+
+  th {
+    background: var(--theme-surface);
+  }
+
+  caption {
+    padding-bottom: 0.25rem;
+    font: 0.75rem var(--theme-font-mono);
+    text-align: left;
+    caption-side: top;
+  }
+
+  dt {
+    font-weight: bold;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  footer {
+    font-size: 0.75rem;
+  }
+
+  footer p {
+    margin: 0.25rem 0;
+  }
+
+  /* Shiki writes light colors inline; switch to its dark set with the theme. */
+  .dark .astro-code,
+  .dark .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+  }
+}
+
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+}

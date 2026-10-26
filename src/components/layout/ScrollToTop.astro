@@ -1,0 +1,18 @@
+<button id="scroll-to-top" type="button" class="fixed right-4 bottom-4" hidden>top ↑</button>
+
+<script>
+	// Looked up on each call because ClientRouter replaces the button on navigation.
+	function updateVisibility() {
+		const button = document.getElementById("scroll-to-top");
+		if (button) button.hidden = window.scrollY < 300;
+	}
+
+	window.addEventListener("scroll", updateVisibility, { passive: true });
+	document.addEventListener("astro:page-load", updateVisibility);
+
+	document.addEventListener("click", (event) => {
+		if (!(event.target instanceof Element) || !event.target.closest("#scroll-to-top")) return;
+		const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+	});
+</script>

@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A newer push to the same branch cancels the older run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    # Pinned: ubuntu-latest moves to 26.04 in Oct-Nov 2026.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          # Authenticated GitHub fetches for the nixpkgs flake input, so shared runner IPs don't hit rate limits.
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Restore and save the Nix store
+        uses: nix-community/cache-nix-action@v7
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.nix', 'flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size-linux: 1G
+
+      - name: Restore and save the npm cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-${{ runner.os }}-
+
+      # Every npm command runs inside the flake's dev shell, so CI uses the same Node as local dev.
+      - name: Install dependencies
+        run: nix develop --command npm ci
+
+      - name: Lint, type-check and check formatting
+        run: nix develop --command npm run check
+
+      - name: Build and run smoke tests
+        run: nix develop --command npm test

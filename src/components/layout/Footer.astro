@@ -1,0 +1,13 @@
+---
+import Navigation from "@/components/layout/Navigation.astro";
+import { authorInfo, socialLinks } from "@/consts";
+
+const built = new Date().toLocaleDateString("en", { month: "short", year: "numeric" });
+---
+
+<footer>
+	<hr />
+	<Navigation links={socialLinks} ariaLabel="Social links" label="Elsewhere" />
+	<p>Last built: {built}.</p>
+	<p>&copy; {new Date().getFullYear()} {authorInfo.name} · {authorInfo.location}</p>
+</footer>

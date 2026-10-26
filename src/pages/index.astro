@@ -1,11 +1,33 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Footer from "@/components/layout/Footer.astro";
+import Header from "@/components/layout/Header.astro";
+import Section from "@/components/layout/Section.astro";
+import PostList from "@/components/PostList.astro";
+import { getPosts } from "@/lib/posts";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const latestPosts = (await getPosts()).slice(0, 5);
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="Home">
+	<Header slot="header" />
+	<p><em>I build the backend systems people only notice when they break.</em></p>
+	<p>
+		Ten years across logistics, payments and public transport. These days I work on order processing at a grocery
+		delivery company, and write here about what I learn running it.
+	</p>
+
+	<Section id="about" title="How I work">
+		<ol>
+			<li><strong>Boring technology first.</strong> Postgres and a queue go further than you think.</li>
+			<li><strong>Small, reversible steps.</strong> Feature flags and dual writes over big-bang migrations.</li>
+			<li><strong>Quiet on-call.</strong> Alerts that page only when a customer is affected.</li>
+		</ol>
+	</Section>
+
+	<Section id="latest" title="Latest posts">
+		<PostList posts={latestPosts} />
+		<p><a href="/blog">All posts →</a></p>
+	</Section>
+	<Footer slot="footer" />
+</BaseLayout>

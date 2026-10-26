@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"span"> {
+	icon: string;
+}
+
+const icons = import.meta.glob<string>("/src/icons/**/*.svg", {
+	query: "?raw",
+	import: "default",
+});
+
+const { icon, class: className, ...attrs } = Astro.props;
+const iconPath = `/src/icons/${icon}.svg`;
+const svgContent = icons[iconPath] ? await icons[iconPath]() : null;
+---
+
+{
+	svgContent ? (
+		<span class={className} {...attrs} set:html={svgContent} />
+	) : (
+		<span
+			class={className}
+			role="img"
+			aria-label={`Missing icon: ${icon}`}
+			{...attrs}
+		>
+			<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<rect x="2" y="2" width="20" height="20" rx="2" />
+			</svg>
+		</span>
+	)
+}
