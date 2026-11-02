@@ -13,7 +13,7 @@ const { entries } = Astro.props;
 		entries.map((entry) => (
 			<div>
 				<dt>{entry.label.toUpperCase()}</dt>
-				<dd>{entry.value}</dd>
+				<dd set:html={entry.value} />
 			</div>
 		))
 	}

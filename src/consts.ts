@@ -348,16 +348,46 @@ export const now = {
 };
 
 export const uses: Entry[] = [
-  { label: "Hardware", value: "[laptop, monitor, keyboard, mouse, headphones]" },
+  {
+    label: "Computers",
+    value: "MacBook Pro M5 for work, Mac Mini M4 at home, Minisforum UM790 Pro for the homelab",
+  },
+  { label: "Keyboards", value: "NuPhy Air75 V3 and NuPhy Halo75" },
+  { label: "Mouse", value: "Logitech MX Vertical" },
+  { label: "Headphones", value: "AirPods Max" },
   {
     label: "OS and setup",
-    value: "[macOS version] with Nix, nix-darwin and home-manager, from my dotfiles",
+    value:
+      'macOS and <a class="link" href="https://nixos.org">NixOS</a>, declared with Nix, <a class="link" href="https://github.com/nix-darwin/nix-darwin">nix-darwin</a> and <a class="link" href="https://github.com/nix-community/home-manager">home-manager</a> from my <a class="link" href="/projects/dotfiles/">dotfiles</a>',
   },
-  { label: "Terminal and shell", value: "[terminal app], [shell], [prompt]" },
-  { label: "Editor", value: "[editor and key plugins]" },
-  { label: "Coding agents", value: "[agents you use], configured in my dotfiles" },
-  { label: "Project workflow", value: "herdr, Linear/Jira, GitHub/GitLab" },
-  { label: "Local infrastructure", value: "Docker, kind for local Kubernetes, Helm" },
-  { label: "Writing and notes", value: "[tools]" },
-  { label: "Fonts and theme", value: "[font, colour scheme]" },
+  {
+    label: "Terminal and shell",
+    value:
+      '<a class="link" href="https://ghostty.org">Ghostty</a>, zsh, <a class="link" href="https://starship.rs">Starship</a>',
+  },
+  {
+    label: "Editor",
+    value:
+      '<a class="link" href="https://zed.dev">Zed</a> and <a class="link" href="https://neovim.io">Neovim</a>',
+  },
+  {
+    label: "Coding agents",
+    value:
+      '<a class="link" href="https://claude.com/claude-code">Claude Code</a> and <a class="link" href="https://github.com/badlogic/pi-mono">Pi</a>, configured in my dotfiles',
+  },
+  {
+    label: "Project workflow",
+    value:
+      '<a class="link" href="https://herdr.dev">herdr</a>, <a class="link" href="https://linear.app">Linear</a>, GitHub',
+  },
+  {
+    label: "Local infrastructure",
+    value: '<a class="link" href="https://github.com/abiosoft/colima">Colima</a> and Docker',
+  },
+  { label: "Writing and notes", value: "Plain Markdown" },
+  {
+    label: "Fonts and theme",
+    value:
+      'Annotation Mono and <a class="link" href="https://tosche.net/fonts/comic-code">Comic Code</a>, with Terafox and Dayfox from <a class="link" href="https://github.com/EdenEast/nightfox.nvim">Nightfox</a>',
+  },
 ];

@@ -4,7 +4,7 @@ title: "Ku▮▮▮▮▮▮"
 summary: Facilitated team sessions, starting with retrospectives, where every observation can end as an action someone owns.
 area: Elixir
 status: in-progress
-order: 2
+order: 3
 ---
 
 ## What it is

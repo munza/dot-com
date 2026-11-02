@@ -189,7 +189,7 @@
 
   /* Underline-on-hover link used in section headers: "ALL POSTS →". */
   .link {
-    padding: 8px 0;
+    padding: 2px 0;
     text-decoration: none;
     border-bottom: 1px solid var(--theme-dot);
     transition: border-color 0.2s ease;
