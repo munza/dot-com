@@ -128,8 +128,8 @@ test("reserved slots show as a card without a page", async () => {
 });
 
 test("projects without a repo get a page without repo links", async () => {
-  const page = await read("projects/agent-factory/index.html");
-  assert.match(page, /AI agent factory/);
+  const page = await read("projects/team-sessions/index.html");
+  assert.match(page, /facilitated team sessions/);
   assert.doesNotMatch(page, /View the repo/);
 });
 
