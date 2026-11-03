@@ -19,7 +19,7 @@ Setting up a new machine or onboarding a new teammate still takes days of copyin
 ## What you get
 
 - **A shell that's ready on day one:** zsh, git with delta, the GitHub CLI, starship, fzf, zoxide, eza and direnv, all on by default.
-- **Modules you switch on or off:** each tool is a module, enabled with `dotfiles.<name>.enable`, including Ghostty, Zed, Neovim, AeroSpace, herdr, Colima, lazygit and more.
+- **Modules you switch on or off:** each tool is a module, enabled with `dotfiles.<name>.enable`, including Ghostty, Zed, Neovim, AeroSpace, Herdr, Colima, lazygit and more.
 - **Coding agents included:** the Pi agent, and agent skills for Pi and Claude Code, refreshed on every switch.
 - **A safer Mac:** Touch ID for `sudo`, firewall on, no guest login, and secrets kept in a local env file or with sops.
 - **Easy rebuilds:** nh shows a package diff before every switch, and rollback is one command.

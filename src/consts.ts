@@ -53,7 +53,7 @@ export const siteConfig: SiteConfig = {
   description:
     "Backend engineer in Amsterdam. I build backend systems and the tools around them, and write about architecture, Nix and Elixir.",
   docId: "TA-02",
-  revision: "2026.10",
+  revision: "2026.11",
 };
 
 export const authorInfo: AuthorInfo = {
@@ -105,8 +105,7 @@ export const pages = {
   },
   projects: {
     title: "Projects · Tawsif Aqib",
-    description:
-      "Tools and products I'm building, from a Nix setup for macOS to an AI agent factory.",
+    description: "Tools and products I'm building, from a Nix setup for macOS to mods for Herdr.",
   },
   writing: {
     title: "Writing · Tawsif Aqib",
@@ -300,7 +299,7 @@ export const roles: Role[] = [
 
 export const workSummary: Entry[] = [
   { label: "Core work", value: "Backend services, distributed systems, pragmatic architecture" },
-  { label: "Product domains", value: "Travel, payments, logistics, subscriptions, lending" },
+  { label: "Product domains", value: "Travel, payments, logistics, subscriptions" },
   { label: "Roles", value: "Individual contributor, technical lead, engineering manager" },
   { label: "Company mix", value: "Startups, scale-ups, enterprises, technology services" },
   {
@@ -327,7 +326,7 @@ export const toolkit: { label: string; items: string[] }[] = [
 ];
 
 export const now = {
-  updated: "October 2026",
+  updated: "November 2026",
   entries: [
     {
       label: "Work",
@@ -336,14 +335,13 @@ export const now = {
     },
     {
       label: "Building",
-      value:
-        "My dotfiles, and a tool for facilitated team retrospectives. Next up: an AI agent factory for automated software development.",
+      value: "My dotfiles, mods for Herdr, and a tool for facilitated team retrospectives.",
     },
     {
       label: "Writing",
       value: "Moving my posts from Medium to this site and starting a monthly post.",
     },
-    { label: "Site", value: "Redesigning this site from scratch." },
+    { label: "Site", value: "Just relaunched with a new design; filling in the last pages." },
   ] satisfies Entry[],
 };
 
@@ -378,7 +376,7 @@ export const uses: Entry[] = [
   {
     label: "Project workflow",
     value:
-      '<a class="link" href="https://herdr.dev">herdr</a>, <a class="link" href="https://linear.app">Linear</a>, GitHub',
+      '<a class="link" href="https://herdr.dev">Herdr</a>, <a class="link" href="https://linear.app">Linear</a>, GitHub',
   },
   {
     label: "Local infrastructure",

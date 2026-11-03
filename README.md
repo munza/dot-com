@@ -28,7 +28,7 @@ npm run dev
 | Which home sections show (§ numbers follow)                | `homeSections` in `src/consts.ts`                              |
 | Favicon (the PNG icons and `favicon.ico` are generated)    | `public/favicon.svg`                                           |
 
-Text in `[brackets]` is still to be filled in: the Uses entries, project details and repo links.
+Text in `[brackets]` is still to be filled in.
 
 ## Features
 

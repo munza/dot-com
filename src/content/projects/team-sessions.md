@@ -19,7 +19,7 @@ Open actions from one session open the team's next one, so follow-up is built in
 
 ## Why I built it
 
-[Two or three sentences on the problem it solves for you]
+Most retrospectives end with a wall of sticky notes and no owner for any of them. I wanted a tool that moves the room from observations to decisions and actions someone owns, and that puts last session's open actions in front of the team at the start of the next one.
 
 ## What you get
 
